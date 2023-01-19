@@ -1,15 +1,7 @@
-- name: Install letsencrypt
-  package:
-    name: "{{ nginx_package }}"
-    state: present
-
-- name: Install letsencrypt packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ nginx_letsencrypt_packages }}"
+- debug:
+    msg: "certbot -n --nginx {% for name in nginx_domain_names %} -d {{ name }} {% endfor %} --email {{ letsencrypt_notification_email }} --agree-tos"
 
 - name: Execute certbot
   shell:
-    cmd: "certbot -n --nginx -d {{ nginx_domain_name }} --email {{ letsencrypt_notification_email }} --agree-tos"
-    #   notifiy: Restart Nginx
+    cmd: "certbot -n --nginx {% for name in nginx_domain_names %} -d {{ name }} {% endfor %} --email {{ letsencrypt_notification_email }} --agree-tos"
+      # notifiy: Restart Nginx
